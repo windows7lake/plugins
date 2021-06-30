@@ -101,6 +101,7 @@
     _webView.UIDelegate = self;
     _webView.navigationDelegate = _navigationDelegate;
     _webView.scrollView.delegate = _navigationDelegate;
+    [_webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
     __weak __typeof__(self) weakSelf = self;
     [_channel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
       [weakSelf onMethodCall:call result:result];
@@ -129,6 +130,7 @@
   if (_progressionDelegate != nil) {
     [_progressionDelegate stopObservingProgress:_webView];
   }
+    [_webView removeObserver:self forKeyPath:@"title" context:nil];
 }
 
 - (UIView*)view {
@@ -459,6 +461,14 @@
   }
 }
 
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    if([@"title" isEqualToString:keyPath]){
+        [_channel invokeMethod:@"onTitleChange" arguments: @{@"title": _webView.title}];
+    }
+    
+}
+
+
 #pragma mark WKUIDelegate
 
 - (WKWebView*)webView:(WKWebView*)webView
@@ -471,5 +481,8 @@
 
   return nil;
 }
+
+
+
 
 @end

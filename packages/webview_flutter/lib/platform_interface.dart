@@ -39,6 +39,8 @@ abstract class WebViewPlatformCallbacksHandler {
 
   void onPageDidScroll(double offset);
 
+  void onPageTitleChange(String title);
+
 }
 
 /// Possible error type categorizations used by [WebResourceError].

@@ -85,6 +85,9 @@ class _WebViewExampleState extends State<WebViewExample> {
           onDidScrollCallback: (offset){
             print(offset);
           },
+          onTitleChangeCallback: (title){
+            print(title);
+          },
           gestureNavigationEnabled: true,
         );
       }),

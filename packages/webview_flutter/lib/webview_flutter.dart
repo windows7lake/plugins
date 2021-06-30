@@ -153,6 +153,8 @@ typedef void WebResourceErrorCallback(WebResourceError error);
 
 typedef void PageDidScrollCallback(double offset);
 
+typedef void PageTitleChangeCallback(String title);
+
 
 /// Specifies possible restrictions on automatic media playback.
 ///
@@ -229,6 +231,7 @@ class WebView extends StatefulWidget {
     this.onProgress,
     this.onWebResourceError,
     this.onDidScrollCallback,
+    this.onTitleChangeCallback,
     this.debuggingEnabled = false,
     this.gestureNavigationEnabled = false,
     this.userAgent,
@@ -380,6 +383,8 @@ class WebView extends StatefulWidget {
 
   final PageDidScrollCallback? onDidScrollCallback;
 
+
+  final PageTitleChangeCallback? onTitleChangeCallback;
 
   /// Controls whether WebView debugging is enabled.
   ///
@@ -611,6 +616,12 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
   void onPageDidScroll(double offset){
     if (_widget.onDidScrollCallback != null) {
       _widget.onDidScrollCallback!(offset);
+    }
+  }
+
+  void onPageTitleChange(String title){
+    if (_widget.onTitleChangeCallback != null) {
+      _widget.onTitleChangeCallback!(title);
     }
   }
 
