@@ -155,7 +155,7 @@ typedef void PageDidScrollCallback(double offset);
 
 typedef void PageTitleChangeCallback(String title);
 
-
+typedef void PageURLChangeCallback(String url);
 /// Specifies possible restrictions on automatic media playback.
 ///
 /// This is typically used in [WebView.initialMediaPlaybackPolicy].
@@ -232,6 +232,7 @@ class WebView extends StatefulWidget {
     this.onWebResourceError,
     this.onDidScrollCallback,
     this.onTitleChangeCallback,
+    this.onUrlChangeCallback,
     this.debuggingEnabled = false,
     this.gestureNavigationEnabled = false,
     this.userAgent,
@@ -385,6 +386,8 @@ class WebView extends StatefulWidget {
 
 
   final PageTitleChangeCallback? onTitleChangeCallback;
+
+  final PageURLChangeCallback? onUrlChangeCallback;
 
   /// Controls whether WebView debugging is enabled.
   ///
@@ -622,6 +625,12 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
   void onPageTitleChange(String title){
     if (_widget.onTitleChangeCallback != null) {
       _widget.onTitleChangeCallback!(title);
+    }
+  }
+
+  void onPageURLChange(String url){
+    if (_widget.onUrlChangeCallback != null) {
+      _widget.onUrlChangeCallback!(url);
     }
   }
 

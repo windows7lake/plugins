@@ -102,6 +102,7 @@
     _webView.navigationDelegate = _navigationDelegate;
     _webView.scrollView.delegate = _navigationDelegate;
     [_webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    [_webView addObserver:self forKeyPath:@"URL" options:NSKeyValueObservingOptionNew context:nil];
     __weak __typeof__(self) weakSelf = self;
     [_channel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
       [weakSelf onMethodCall:call result:result];
@@ -464,6 +465,8 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     if([@"title" isEqualToString:keyPath]){
         [_channel invokeMethod:@"onTitleChange" arguments: @{@"title": _webView.title}];
+    } else if([@"URL" isEqualToString:keyPath]){
+        [_channel invokeMethod:@"onURLChange" arguments: @{@"url": _webView.URL.absoluteString}];
     }
     
 }

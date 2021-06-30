@@ -41,6 +41,8 @@ abstract class WebViewPlatformCallbacksHandler {
 
   void onPageTitleChange(String title);
 
+  void onPageURLChange(String url);
+
 }
 
 /// Possible error type categorizations used by [WebResourceError].

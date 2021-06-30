@@ -73,6 +73,10 @@ class MethodChannelWebViewPlatform implements WebViewPlatformController {
         _platformCallbacksHandler.onPageTitleChange(call.arguments['title']!);
         return null;
 
+      case "onURLChange":
+        _platformCallbacksHandler.onPageTitleChange(call.arguments['url']!);
+        return null;
+
     }
 
     throw MissingPluginException(

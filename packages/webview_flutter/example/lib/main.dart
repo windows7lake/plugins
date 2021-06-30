@@ -88,6 +88,9 @@ class _WebViewExampleState extends State<WebViewExample> {
           onTitleChangeCallback: (title){
             print(title);
           },
+          onUrlChangeCallback: (url){
+            print(url);
+          },
           gestureNavigationEnabled: true,
         );
       }),
