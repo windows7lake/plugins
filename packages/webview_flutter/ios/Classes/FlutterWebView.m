@@ -132,6 +132,7 @@
     [_progressionDelegate stopObservingProgress:_webView];
   }
     [_webView removeObserver:self forKeyPath:@"title" context:nil];
+    [_webView removeObserver:self forKeyPath:@"URL" context:nil];
 }
 
 - (UIView*)view {
