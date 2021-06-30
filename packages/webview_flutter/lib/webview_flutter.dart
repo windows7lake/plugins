@@ -151,6 +151,9 @@ typedef void PageLoadingCallback(int progress);
 /// Signature for when a [WebView] has failed to load a resource.
 typedef void WebResourceErrorCallback(WebResourceError error);
 
+typedef void PageDidScrollCallback(double offset);
+
+
 /// Specifies possible restrictions on automatic media playback.
 ///
 /// This is typically used in [WebView.initialMediaPlaybackPolicy].
@@ -225,6 +228,7 @@ class WebView extends StatefulWidget {
     this.onPageFinished,
     this.onProgress,
     this.onWebResourceError,
+    this.onDidScrollCallback,
     this.debuggingEnabled = false,
     this.gestureNavigationEnabled = false,
     this.userAgent,
@@ -372,6 +376,10 @@ class WebView extends StatefulWidget {
   /// This can be called for any resource (iframe, image, etc.), not just for
   /// the main page.
   final WebResourceErrorCallback? onWebResourceError;
+
+
+  final PageDidScrollCallback? onDidScrollCallback;
+
 
   /// Controls whether WebView debugging is enabled.
   ///
@@ -597,6 +605,12 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
   void onWebResourceError(WebResourceError error) {
     if (_widget.onWebResourceError != null) {
       _widget.onWebResourceError!(error);
+    }
+  }
+
+  void onPageDidScroll(double offset){
+    if (_widget.onDidScrollCallback != null) {
+      _widget.onDidScrollCallback!(offset);
     }
   }
 
