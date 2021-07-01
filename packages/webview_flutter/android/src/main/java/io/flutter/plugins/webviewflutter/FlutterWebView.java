@@ -16,16 +16,19 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import androidx.annotation.NonNull;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.platform.PlatformView;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public class FlutterWebView implements PlatformView, MethodCallHandler {
   private static final String JS_CHANNEL_NAMES_FIELD = "javascriptChannelNames";
@@ -63,7 +66,7 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
             }
           };
 
-      final WebView newWebView = new WebView(view.getContext());
+      final WebView newWebView = new ScrollListenerWebView(view.getContext());
       newWebView.setWebViewClient(webViewClient);
 
       final WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
@@ -76,6 +79,12 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
     @Override
     public void onProgressChanged(WebView view, int progress) {
       flutterWebViewClient.onLoadingProgress(progress);
+    }
+
+    @Override
+    public void onReceivedTitle(WebView view, String title) {
+      super.onReceivedTitle(view, title);
+      flutterWebViewClient.onReceivedTitle(view, title);
     }
   }
 
@@ -96,7 +105,7 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
     Boolean usesHybridComposition = (Boolean) params.get("usesHybridComposition");
     webView =
         (usesHybridComposition)
-            ? new WebView(context)
+            ? new ScrollListenerWebView(context)
             : new InputAwareWebView(context, containerView);
 
     displayListenerProxy.onPostWebViewInitialization(displayManager);
@@ -132,6 +141,13 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
       String url = (String) params.get("initialUrl");
       webView.loadUrl(url);
     }
+
+    ((ScrollListenerWebView)webView).setOnScrollChangeListener(new ScrollListenerWebView.OnScrollChangeListener() {
+      @Override
+      public void onDidScrollCallback(int offset) {
+          flutterWebViewClient.onDidScrollCallback(offset);
+      }
+    });
   }
 
   @Override

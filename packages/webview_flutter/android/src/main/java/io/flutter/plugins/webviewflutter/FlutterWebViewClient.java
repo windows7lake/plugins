@@ -114,6 +114,21 @@ class FlutterWebViewClient {
     return true;
   }
 
+  void onReceivedTitle(WebView view, String title) {
+    Map<String, Object> args = new HashMap<>();
+    args.put("url", view.getUrl());
+    methodChannel.invokeMethod("onURLChange", args);
+    args.clear();
+    args.put("title", title);
+    methodChannel.invokeMethod("onTitleChange", args);
+  }
+  
+  void onDidScrollCallback(int offset) {
+    Map<String, Object> args = new HashMap<>();
+    args.put("offset", (double) offset);
+    methodChannel.invokeMethod("onPageDidScroll", args);
+  }
+
   private void onPageStarted(WebView view, String url) {
     Map<String, Object> args = new HashMap<>();
     args.put("url", url);
