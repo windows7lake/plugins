@@ -465,9 +465,17 @@
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     if([@"title" isEqualToString:keyPath]){
-        [_channel invokeMethod:@"onTitleChange" arguments: @{@"title": _webView.title}];
+        NSString * title = _webView.title;
+        if(title == nil){
+            title = @"";
+        }
+        [_channel invokeMethod:@"onTitleChange" arguments: @{@"title": title}];
     } else if([@"URL" isEqualToString:keyPath]){
-        [_channel invokeMethod:@"onURLChange" arguments: @{@"url": _webView.URL.absoluteString}];
+        NSString * url = _webView.URL.absoluteString;
+        if(url == nil){
+            url = @"";
+        }
+        [_channel invokeMethod:@"onURLChange" arguments: @{@"url": url}];
     }
     
 }
