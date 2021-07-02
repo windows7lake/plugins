@@ -114,11 +114,16 @@ class FlutterWebViewClient {
     return true;
   }
 
-  void onReceivedTitle(WebView view, String title) {
+  void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+    Log.e("doUpdateVisitedHistory", view.getUrl());
     Map<String, Object> args = new HashMap<>();
     args.put("url", view.getUrl());
     methodChannel.invokeMethod("onURLChange", args);
-    args.clear();
+  }
+
+  void onReceivedTitle(WebView view, String title) {
+    Log.e("onReceivedTitle title", title);
+    Map<String, Object> args = new HashMap<>();
     args.put("title", title);
     methodChannel.invokeMethod("onTitleChange", args);
   }
@@ -218,6 +223,12 @@ class FlutterWebViewClient {
       }
 
       @Override
+      public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+        super.doUpdateVisitedHistory(view, url, isReload);
+        FlutterWebViewClient.this.doUpdateVisitedHistory(view, url, isReload);
+      }
+
+      @Override
       public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
         // Deliberately empty. Occasionally the webview will mark events as having failed to be
         // handled even though they were handled. We don't want to propagate those as they're not
@@ -263,6 +274,12 @@ class FlutterWebViewClient {
       public void onReceivedError(
           WebView view, int errorCode, String description, String failingUrl) {
         FlutterWebViewClient.this.onWebResourceError(errorCode, description, failingUrl);
+      }
+
+      @Override
+      public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+        super.doUpdateVisitedHistory(view, url, isReload);
+        FlutterWebViewClient.this.doUpdateVisitedHistory(view, url, isReload);
       }
 
       @Override

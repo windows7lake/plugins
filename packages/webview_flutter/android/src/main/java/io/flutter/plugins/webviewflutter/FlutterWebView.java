@@ -64,6 +64,12 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
               }
               return true;
             }
+
+            @Override
+            public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+              super.doUpdateVisitedHistory(view, url, isReload);
+              flutterWebViewClient.doUpdateVisitedHistory(view, url, isReload);
+            }
           };
 
       final WebView newWebView = new ScrollListenerWebView(view.getContext());
