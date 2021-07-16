@@ -115,14 +115,12 @@ class FlutterWebViewClient {
   }
 
   void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
-    Log.d("doUpdateVisitedHistory", view.getUrl());
     Map<String, Object> args = new HashMap<>();
     args.put("url", view.getUrl());
     methodChannel.invokeMethod("onURLChange", args);
   }
 
   void onReceivedTitle(WebView view, String title) {
-    Log.d("onReceivedTitle title", title);
     Map<String, Object> args = new HashMap<>();
     args.put("title", title);
     methodChannel.invokeMethod("onTitleChange", args);
